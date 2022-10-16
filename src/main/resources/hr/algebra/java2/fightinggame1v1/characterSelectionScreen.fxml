@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.java2.fightinggame1v1.CharacterSelectionScreen">
+   <children>
+      <Label layoutX="38.0" layoutY="104.0" text="Player one name:" />
+      <Label layoutX="611.0" layoutY="104.0" text="Player two name:" />
+      <TextField fx:id="tfPlayerOneName" layoutX="38.0" layoutY="136.0" />
+      <TextField fx:id="tfPlayerTwoName" layoutX="611.0" layoutY="136.0" />
+      <Label layoutX="324.0" layoutY="40.0" text="Character selection">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnStartGame" layoutX="366.0" layoutY="407.0" mnemonicParsing="false" onAction="#startGame" text="Start game" />
+      <ComboBox fx:id="cbPlayerOneClass" layoutX="38.0" layoutY="213.0" onAction="#onCharacterClassChanged" prefWidth="150.0" />
+      <ComboBox fx:id="cbPlayerTwoClass" layoutX="611.0" layoutY="213.0" onAction="#onCharacterClassChanged" prefWidth="150.0" />
+      <Label layoutX="38.0" layoutY="189.0" text="Character class" />
+      <Label layoutX="611.0" layoutY="189.0" text="Character class" />
+      <ImageView fx:id="imPlayerOneImage" fitHeight="220.0" fitWidth="220.0" layoutX="38.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="imPlayerTwoImage" fitHeight="220.0" fitWidth="220.0" layoutX="541.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="lbErrorMessage" layoutX="294.0" layoutY="449.0" prefHeight="17.0" prefWidth="212.0" textFill="RED" />
+   </children>
+</AnchorPane>

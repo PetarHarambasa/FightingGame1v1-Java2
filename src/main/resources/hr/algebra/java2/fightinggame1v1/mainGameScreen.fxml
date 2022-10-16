@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.java2.fightinggame1v1.MainGameScreen">
+   <children>
+      <Label layoutX="399.0" layoutY="15.0" text="Battle for Middle-earth">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="imPlayerOneImage" fitHeight="220.0" fitWidth="220.0" layoutX="14.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="imPlayerTwoImage" fitHeight="220.0" fitWidth="220.0" layoutX="766.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="lbPlayerOneInfo" layoutX="14.0" layoutY="56.0" wrapText="true">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbPlayerTwoInfo" alignment="CENTER_RIGHT" layoutX="766.0" layoutY="56.0" textAlignment="RIGHT" wrapText="true">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnPlayerOneMoveOne" layoutX="14.0" layoutY="413.0" mnemonicParsing="false" onAction="#attackOneButtonPressed" prefHeight="123.0" prefWidth="141.0" style="-fx-background-color: none;" textAlignment="CENTER" wrapText="true" />
+      <Button fx:id="btnPlayerOneMoveTwo" layoutX="155.0" layoutY="413.0" mnemonicParsing="false" onAction="#attackTwoButtonPressed" prefHeight="123.0" prefWidth="141.0" style="-fx-background-color: none;" textAlignment="CENTER" wrapText="true" />
+      <Button fx:id="btnPlayerOneMoveThree" layoutX="296.0" layoutY="413.0" mnemonicParsing="false" onAction="#attackThreeButtonPressed" prefHeight="123.0" prefWidth="141.0" style="-fx-background-color: none;" textAlignment="CENTER" wrapText="true" />
+      <Button fx:id="btnPlayerTwoMoveOne" layoutX="563.0" layoutY="413.0" mnemonicParsing="false" onAction="#attackOneButtonPressed" prefHeight="123.0" prefWidth="141.0" style="-fx-background-color: none;" textAlignment="CENTER" wrapText="true" />
+      <Button fx:id="btnPlayerTwoMoveTwo" layoutX="704.0" layoutY="413.0" mnemonicParsing="false" onAction="#attackTwoButtonPressed" prefHeight="123.0" prefWidth="141.0" style="-fx-background-color: none;" textAlignment="CENTER" wrapText="true" />
+      <Button fx:id="btnPlayerTwoMoveThree" layoutX="845.0" layoutY="413.0" mnemonicParsing="false" onAction="#attackThreeButtonPressed" prefHeight="123.0" prefWidth="141.0" style="-fx-background-color: none;" textAlignment="CENTER" wrapText="true" />
+      <Label fx:id="lbPlayerOneDmgDeal" layoutX="296.0" layoutY="207.0" textFill="RED" />
+      <Label fx:id="lbPlayerTwoDmgDeal" layoutX="675.0" layoutY="207.0" textFill="RED" />
+   </children>
+</AnchorPane>

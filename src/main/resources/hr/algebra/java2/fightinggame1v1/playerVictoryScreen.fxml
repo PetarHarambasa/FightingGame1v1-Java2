@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.java2.fightinggame1v1.PlayerVictoryScreen">
+   <children>
+      <MenuBar layoutX="-1.0" layoutY="2.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="New Game">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#startNewGame" text="Start new game" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Show used moves">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#showUsedMoves" text="Show last game used moves" />
+              </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+      <Label fx:id="lbPlayerOneWins" layoutX="14.0" layoutY="61.0" wrapText="true">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbPlayerTwoWins" alignment="CENTER_RIGHT" layoutX="566.0" layoutY="61.0" textAlignment="RIGHT" wrapText="true">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="366.0" layoutY="58.0" prefHeight="39.0" prefWidth="69.0" text="Last game victory time:" textAlignment="CENTER" wrapText="true" />
+      <ImageView fx:id="imPlayerOneImage" fitHeight="220.0" fitWidth="220.0" layoutX="14.0" layoutY="140.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="imPlayerTwoImage" fitHeight="220.0" fitWidth="220.0" layoutX="566.0" layoutY="140.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="lbTimeOfVictory" contentDisplay="CENTER" layoutX="370.0" layoutY="97.0" textAlignment="CENTER" wrapText="true" />
+      <Label fx:id="lbBestVictoryTimePLayerOne" layoutX="14.0" layoutY="89.0" wrapText="true" />
+      <Label fx:id="lbBestVictoryTimePLayerTwo" layoutX="566.0" layoutY="89.0" wrapText="true" />
+   </children>
+</AnchorPane>
