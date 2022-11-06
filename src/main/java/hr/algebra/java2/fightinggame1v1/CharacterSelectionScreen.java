@@ -121,6 +121,8 @@ public class CharacterSelectionScreen implements Initializable {
 
         File f1 = new File("savedGamePlayerOneMoves.ser");
         File f2 = new File("savedGamePlayerTwoMoves.ser");
+        File f3 = new File("savedGamePlayerOne.ser");
+        File f4 = new File("savedGamePlayerTwo.ser");
 
         try (ObjectInputStream playerOneDeserializator = new ObjectInputStream((
                 new FileInputStream("savedGamePlayerOne.ser")
@@ -140,6 +142,8 @@ public class CharacterSelectionScreen implements Initializable {
 
         f1.delete();
         f2.delete();
+        f3.delete();
+        f4.delete();
     }
 
     private void continueGame(SerializablePlayer playerOne, SerializablePlayer playerTwo) throws IOException {

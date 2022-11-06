@@ -8,8 +8,7 @@ import java.io.*;
 import java.util.List;
 
 public class FileUtils {
-    static File f3 = new File("savedGamePlayerOne.ser");
-    static File f4 = new File("savedGamePlayerTwo.ser");
+
     public static Image getImage(String path) throws FileNotFoundException {
         FileInputStream fileStream = new FileInputStream(path);
 
@@ -17,9 +16,6 @@ public class FileUtils {
     }
 
     public static void saveCurrentGame(PlayerInfo playerOne, PlayerInfo playerTwo) throws IOException {
-
-        f3.delete();
-        f4.delete();
 
         SerializablePlayer serializablePlayerOne = new SerializablePlayer(playerOne.getPlayerName(),
                 playerOne.getCharacterClass(), playerOne.getHealthPoints(), playerOne.getNumberOfWins(),
