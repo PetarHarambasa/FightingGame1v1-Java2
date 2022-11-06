@@ -21,6 +21,9 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
+import static hr.algebra.java2.utils.Messenger.*;
+import static hr.algebra.java2.utils.ReflectionUtils.*;
+
 public class CharacterSelectionScreen implements Initializable {
     @FXML
     private Label lbErrorMessage;
@@ -38,6 +41,7 @@ public class CharacterSelectionScreen implements Initializable {
     private ImageView imPlayerTwoImage;
     private static PlayerInfo playerOneInfo;
     private static PlayerInfo playerTwoInfo;
+
     public static PlayerInfo getPlayerOneInfo() {
         return playerOneInfo;
     }
@@ -111,5 +115,106 @@ public class CharacterSelectionScreen implements Initializable {
         } else if (cbPlayerClass == Characters.Assassin) {
             playerImage.setImage(assassinImage);
         }
+    }
+
+    public void loadGame() {
+
+        File f1 = new File("savedGamePlayerOneMoves.ser");
+        File f2 = new File("savedGamePlayerTwoMoves.ser");
+
+        try (ObjectInputStream playerOneDeserializator = new ObjectInputStream((
+                new FileInputStream("savedGamePlayerOne.ser")
+        ))) {
+            SerializablePlayer PlayerOneData = (SerializablePlayer) playerOneDeserializator.readObject();
+            try (ObjectInputStream playerTwoDeserializator = new ObjectInputStream((
+                    new FileInputStream("savedGamePlayerTwo.ser")
+            ))) {
+                SerializablePlayer PlayerTwoData = (SerializablePlayer) playerTwoDeserializator.readObject();
+                continueGame(PlayerOneData, PlayerTwoData);
+            }
+
+        }
+        catch (IOException | ClassNotFoundException e) {
+            showLoadingErrorMessage();
+        }
+
+        f1.delete();
+        f2.delete();
+    }
+
+    private void continueGame(SerializablePlayer playerOne, SerializablePlayer playerTwo) throws IOException {
+
+        playerOneInfo =  new PlayerInfo(playerOne.getPlayerName(), playerOne.getCharacterClass(), playerOne.getHealthPoints(), setPlayerImageOnLoad(playerOne), playerOne.getNumberOfWins(), playerOne.getBestVictoryTime(), playerOne.getMovesList());
+        playerTwoInfo =  new PlayerInfo(playerTwo.getPlayerName(), playerTwo.getCharacterClass(), playerTwo.getHealthPoints(), setPlayerImageOnLoad(playerTwo), playerTwo.getNumberOfWins(), playerTwo.getBestVictoryTime(), playerTwo.getMovesList());
+
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(Settings.getFILENAME_MAIN_GAME()));
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 600);
+        HelloApplication.getMainStage().setTitle(Settings.getSTAGE_TITLE());
+        HelloApplication.getMainStage().setScene(scene);
+        HelloApplication.getMainStage().show();
+    }
+
+    private Image setPlayerImageOnLoad(SerializablePlayer playerOne) throws FileNotFoundException {
+        if (playerOne.getCharacterClass() == Characters.Archer){
+            return FileUtils.getImage(archer.getIMAGE_PATH());
+        } else if(playerOne.getCharacterClass() == Characters.Warrior){
+            return FileUtils.getImage(warrior.getIMAGE_PATH());
+        }else if(playerOne.getCharacterClass() == Characters.Wizard){
+            return FileUtils.getImage(wizard.getIMAGE_PATH());
+        }else if(playerOne.getCharacterClass() == Characters.HorseMan) {
+            return FileUtils.getImage(horseMan.getIMAGE_PATH());
+        }else {
+            return FileUtils.getImage(assassin.getIMAGE_PATH());
+        }
+    }
+
+    public void generateDocumentation(){
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<!DOCTYPE html>");
+        builder.append("<html>");
+        builder.append("<head>");
+        builder.append("<title>Dokumentacija igre</title>");
+        builder.append("</head>");
+        builder.append("<body>");
+        builder.append("<h1>Dokumentacija projektnog zadatka</h1>");
+        builder.append("<h3>Popis apstraktnih klasa:</h3>");
+        appendDivToBuilder(CharacterClass.class, builder);
+        builder.append("<h3>Popis klasa:</h3>");
+        appendDivToBuilder(Archer.class,builder);
+        appendDivToBuilder(Warrior.class,builder);
+        appendDivToBuilder(Wizard.class,builder);
+        appendDivToBuilder(HorseMan.class,builder);
+        appendDivToBuilder(Assassin.class,builder);
+        appendDivToBuilder(PlayerInfo.class,builder);
+        appendDivToBuilder(Characters.class,builder);
+        appendDivToBuilder(SerializablePlayer.class,builder);
+
+
+        builder.append("</body>");
+        builder.append("</html>");
+
+
+        try (FileWriter fw = new FileWriter("documentation.html")) {
+            fw.write(builder.toString());
+
+            showDocumentCreationSuccessMessage();
+
+        } catch (IOException e) {
+            showDocumentCreationErrorMessage(e.getMessage());
+        }
+    }
+
+    private static void appendDivToBuilder(Class<?> clazz, StringBuilder builder) {
+        readClassInfo(clazz, builder);
+        builder.append("<div style='margin-left: 25px;'>");
+        builder.append("<p>Properties:</p>");
+        appendFields(clazz, builder);
+        builder.append("<p style='margin-top: 25px;'>Methods:</p>");
+        appendMethods(clazz, builder);
+        builder.append("<p style='margin-top: 25px;'>Constructors:</p>");
+        appendConstructors(clazz, builder);
+        builder.append("<p></p>");
+        builder.append("</div>");
     }
 }

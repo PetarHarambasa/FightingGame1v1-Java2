@@ -1,6 +1,8 @@
 package hr.algebra.java2.fightinggame1v1;
 
+import hr.algebra.java2.model.SerializablePlayer;
 import hr.algebra.java2.utils.ClassPLayerUtil;
+import hr.algebra.java2.utils.FileUtils;
 import hr.algebra.java2.utils.Messenger;
 import hr.algebra.java2.utils.Settings;
 import javafx.fxml.FXML;
@@ -11,7 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import hr.algebra.java2.model.PlayerInfo;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -68,7 +70,7 @@ public class PlayerVictoryScreen implements Initializable {
         if (victoryPlayer == player && victoryPlayer.getBestVictoryTime() == 0 || (victoryPlayer == player && victoryPlayer.getBestVictoryTime() > victoryTime)) {
             victoryPlayer.setBestVictoryTime(victoryTime);
         }
-        Messenger.setBestTime(player,lbBestVictoryTimePLayer);
+        Messenger.setBestTime(player, lbBestVictoryTimePLayer);
     }
 
     public void showUsedMoves() throws IOException {
@@ -77,5 +79,9 @@ public class PlayerVictoryScreen implements Initializable {
         HelloApplication.getMainStage().setTitle(Settings.getSTAGE_TITLE());
         HelloApplication.getMainStage().setScene(scene);
         HelloApplication.getMainStage().show();
+    }
+    public void saveGame() throws IOException {
+        FileUtils.saveCurrentGame(playerOne, playerTwo);
+        Messenger.showSavedGameMessage();
     }
 }

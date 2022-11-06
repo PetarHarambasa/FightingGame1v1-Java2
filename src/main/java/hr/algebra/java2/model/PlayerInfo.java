@@ -2,6 +2,9 @@ package hr.algebra.java2.model;
 
 import javafx.scene.image.Image;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayerInfo {
     String playerName;
     Characters characterClass;
@@ -9,6 +12,7 @@ public class PlayerInfo {
     Image playerImage;
     int numberOfWins;
     long bestVictoryTime;
+    List<List<String>> movesList = new ArrayList<>();
 
     public PlayerInfo(String playerName, Characters characterClass, int healthPoints, Image playerImageView) {
         this.playerName = playerName;
@@ -17,6 +21,16 @@ public class PlayerInfo {
         this.playerImage = playerImageView;
         numberOfWins = 0;
         bestVictoryTime = 0;
+    }
+
+    public PlayerInfo(String playerName, Characters characterClass, int healthPoints, Image playerImage, int numberOfWins, long bestVictoryTime, List<List<String>> movesList) {
+        this.playerName = playerName;
+        this.characterClass = characterClass;
+        this.healthPoints = healthPoints;
+        this.playerImage = playerImage;
+        this.numberOfWins = numberOfWins;
+        this.bestVictoryTime = bestVictoryTime;
+        this.movesList = movesList;
     }
 
     public String getPlayerName() {
@@ -65,5 +79,13 @@ public class PlayerInfo {
 
     public void setNumberOfWins(int numberOfWins) {
         this.numberOfWins = numberOfWins;
+    }
+
+    public List<List<String>> getMovesList() {
+        return movesList;
+    }
+
+    public void setMovesList(List<List<String>> movesList) {
+        this.movesList = movesList;
     }
 }

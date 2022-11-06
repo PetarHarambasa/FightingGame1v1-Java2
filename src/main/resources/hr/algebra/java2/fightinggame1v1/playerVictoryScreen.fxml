@@ -22,6 +22,11 @@
                 <MenuItem mnemonicParsing="false" onAction="#showUsedMoves" text="Show last game used moves" />
               </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Save current game">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#saveGame" text="Save game" />
+               </items>
+            </Menu>
         </menus>
       </MenuBar>
       <Label fx:id="lbPlayerOneWins" layoutX="14.0" layoutY="61.0" wrapText="true">

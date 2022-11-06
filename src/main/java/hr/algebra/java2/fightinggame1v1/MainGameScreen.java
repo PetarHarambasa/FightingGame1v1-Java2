@@ -1,6 +1,7 @@
 package hr.algebra.java2.fightinggame1v1;
 
 import hr.algebra.java2.model.*;
+import hr.algebra.java2.utils.FileUtils;
 import hr.algebra.java2.utils.Messenger;
 import hr.algebra.java2.utils.Settings;
 import javafx.fxml.FXML;
@@ -13,8 +14,12 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -64,29 +69,26 @@ public class MainGameScreen implements Initializable {
         return victoryPlayer;
     }
 
-    public List<String> movesListPlayerOne = new ArrayList<>();
-    public List<String> movesListPlayerTwo = new ArrayList<>();
-
-    public static List<List<String>> getMovesListPlayerOne() {
-        return historyOfGameMovesPlayerOne;
-    }
-
-    public static List<List<String>> getMovesListPlayerTwo() {
-        return historyOfGameMovesPlayerTwo;
-    }
-
+    public static List<String> movesListPlayerOne;
+    public static List<String> movesListPlayerTwo;
     public static Archer archer = Archer.getInstance();
     public static Warrior warrior = Warrior.getInstance();
     public static Wizard wizard = Wizard.getInstance();
     public static HorseMan horseMan = HorseMan.getInstance();
     public static Assassin assassin = Assassin.getInstance();
 
-    public static List<List<String>> historyOfGameMovesPlayerOne = new ArrayList<>();
-    public static List<List<String>> historyOfGameMovesPlayerTwo = new ArrayList<>();
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        movesListPlayerOne = new ArrayList<>();
+        movesListPlayerTwo = new ArrayList<>();
+
         startTimeCounter = Instant.now();
+
+        try {
+            loadSavedMoves();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
         playerOneTurn = true;
         playerTwoTurn = false;
@@ -243,11 +245,13 @@ public class MainGameScreen implements Initializable {
 
     private void checkWinner(PlayerInfo playerLose, PlayerInfo playerWin) throws IOException {
         if (playerLose.getHealthPoints() <= 0) {
-            historyOfGameMovesPlayerOne.add(movesListPlayerOne);
-            historyOfGameMovesPlayerTwo.add(movesListPlayerTwo);
+
+            playerOne.getMovesList().add(movesListPlayerOne);
+            playerTwo.getMovesList().add(movesListPlayerTwo);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(Messenger.getVICTORY_MESSAGE());
+            alert.setHeaderText("Game ended!");
             alert.setContentText("Player " + playerWin.getPlayerName() + " won!");
 
             finishTimeCounter = Instant.now();
@@ -359,5 +363,30 @@ public class MainGameScreen implements Initializable {
         btnPlayerOneMoveOne.setVisible(false);
         btnPlayerOneMoveTwo.setVisible(false);
         btnPlayerOneMoveThree.setVisible(false);
+    }
+
+    public void saveGame() throws IOException {
+        FileUtils.saveCurrentGameMoves(movesListPlayerOne, movesListPlayerTwo);
+        FileUtils.saveCurrentGame(playerOne, playerTwo);
+        Messenger.showSavedGameMessage();
+    }
+
+    private void loadSavedMoves() throws IOException, ClassNotFoundException {
+        Path pathMovesPlayerOne = Path.of("savedGamePlayerOneMoves.ser");
+        if (Files.exists(pathMovesPlayerOne)) {
+            try (ObjectInputStream playerOneMovesDeserializator = new ObjectInputStream((
+                    new FileInputStream("savedGamePlayerOneMoves.ser")
+            ))) {
+                movesListPlayerOne = (List<String>) playerOneMovesDeserializator.readObject();
+            }
+            Path pathMovesPlayerTwo = Path.of("savedGamePlayerTwoMoves.ser");
+            if (Files.exists(pathMovesPlayerTwo)) {
+                try (ObjectInputStream playerOneMovesDeserializator = new ObjectInputStream((
+                        new FileInputStream("savedGamePlayerTwoMoves.ser")
+                ))) {
+                    movesListPlayerTwo = (List<String>) playerOneMovesDeserializator.readObject();
+                }
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -14,16 +15,13 @@ public class UsedMovesScreen implements Initializable {
     private ListView<List<String>> lvPlayerOneMoves;
     @FXML
     private ListView<List<String>> lvPlayerTwoMoves;
-    public List<List<String>> historyOfGameMovesPlayerOne = MainGameScreen.getMovesListPlayerOne();
-    public List<List<String>> historyOfGameMovesPlayerTwo = MainGameScreen.getMovesListPlayerTwo();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        for (List<String> gameMovesPlayer : historyOfGameMovesPlayerOne) {
+        for (List<String> gameMovesPlayer : CharacterSelectionScreen.getPlayerOneInfo().getMovesList()) {
             lvPlayerOneMoves.getItems().add(gameMovesPlayer);
         }
-        for (List<String> gameMovesPlayer : historyOfGameMovesPlayerTwo) {
+        for (List<String> gameMovesPlayer : CharacterSelectionScreen.getPlayerTwoInfo().getMovesList()) {
             lvPlayerTwoMoves.getItems().add(gameMovesPlayer);
         }
     }
