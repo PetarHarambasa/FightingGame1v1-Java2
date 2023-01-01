@@ -5,11 +5,13 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.java2.fightinggame1v1.MainGameScreen">
+<AnchorPane prefHeight="600.0" prefWidth="1244.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.java2.fightinggame1v1.MainGameScreen">
    <children>
       <Label layoutX="399.0" layoutY="15.0" text="Battle for Middle-earth">
          <font>
@@ -45,5 +47,8 @@
           </Menu>
         </menus>
       </MenuBar>
+      <TextArea fx:id="chatTextArea" editable="false" layoutX="1010.0" layoutY="56.0" prefHeight="397.0" prefWidth="200.0" />
+      <TextField fx:id="chatMessageTextField" layoutX="1010.0" layoutY="475.0" onAction="#onEnterSendMessage" onKeyPressed="#onEnterSendMessage" prefHeight="25.0" prefWidth="200.0" />
+      <Button layoutX="1010.0" layoutY="524.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="25.0" prefWidth="200.0" text="Send" />
    </children>
 </AnchorPane>

@@ -1,6 +1,7 @@
 package hr.algebra.java2.fightinggame1v1;
 
 import hr.algebra.java2.model.*;
+import hr.algebra.java2.rmi.ChatService;
 import hr.algebra.java2.utils.FileUtils;
 import hr.algebra.java2.utils.Messenger;
 import hr.algebra.java2.utils.Settings;
@@ -8,10 +9,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 
 import java.io.FileInputStream;
@@ -20,11 +20,15 @@ import java.io.ObjectInputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+
+import static hr.algebra.java2.jndi.ServerConfigurationKey.RMI_SERVER_PORT;
 
 public class MainGameScreen implements Initializable {
     @FXML
@@ -53,6 +57,10 @@ public class MainGameScreen implements Initializable {
     private Button btnPlayerTwoMoveTwo;
     @FXML
     private Button btnPlayerTwoMoveThree;
+    @FXML
+    private TextArea chatTextArea;
+    @FXML
+    private TextField chatMessageTextField;
     private Boolean playerOneTurn;
     private Boolean playerTwoTurn;
     public Instant startTimeCounter;
@@ -76,6 +84,8 @@ public class MainGameScreen implements Initializable {
     public static Wizard wizard = Wizard.getInstance();
     public static HorseMan horseMan = HorseMan.getInstance();
     public static Assassin assassin = Assassin.getInstance();
+    private static Map<Long, PlayerMetaData> playersMetadata = new HashMap<>();
+    private ChatService stub = null;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -84,9 +94,13 @@ public class MainGameScreen implements Initializable {
 
         startTimeCounter = Instant.now();
 
+
         try {
             loadSavedMoves();
-        } catch (IOException | ClassNotFoundException e) {
+
+            Registry registry = LocateRegistry.getRegistry("localhost", RMI_SERVER_PORT.ordinal());
+            stub = (ChatService) registry.lookup(ChatService.REMOTE_OBJECT_NAME);
+        } catch (IOException | ClassNotFoundException | NotBoundException e) {
             throw new RuntimeException(e);
         }
 
@@ -321,11 +335,11 @@ public class MainGameScreen implements Initializable {
         }
     }
 
-    private void playerShowLostHp(PlayerInfo player, int classMoveOneDmg) {
+    private void playerShowLostHp(PlayerInfo player, int classMoveDmg) {
         if (player == playerTwo) {
-            lbPlayerTwoDmgDeal.setText("-" + classMoveOneDmg);
+            lbPlayerTwoDmgDeal.setText("-" + classMoveDmg);
         } else if (player == playerOne) {
-            lbPlayerOneDmgDeal.setText("-" + classMoveOneDmg);
+            lbPlayerOneDmgDeal.setText("-" + classMoveDmg);
         }
     }
 
@@ -387,6 +401,35 @@ public class MainGameScreen implements Initializable {
                     movesListPlayerTwo = (List<String>) playerOneMovesDeserializator.readObject();
                 }
             }
+        }
+    }
+
+    public void sendMessage() {
+        messageProvider();
+    }
+
+    public void onEnterSendMessage(KeyEvent e) {
+        if (e.getCode().toString().equals("TAB")) {
+            messageProvider();
+            chatMessageTextField.requestFocus();
+        }
+    }
+
+    private void messageProvider() {
+        try {
+            if (!chatMessageTextField.getText().equals("")) {
+                stub.sendMessage(playerOne.getPlayerName() + " (" + playerOne.getCharacterClass() + ") " + " > " + chatMessageTextField.getText());
+                List<String> chatHistory = stub.getChatHistory();
+                StringBuilder chatHistoryBuilder = new StringBuilder();
+                for (String message : chatHistory) {
+                    chatHistoryBuilder.append(message);
+                    chatHistoryBuilder.append("\n");
+                }
+                chatTextArea.setText(chatHistoryBuilder.toString());
+            }
+            chatMessageTextField.clear();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
 }

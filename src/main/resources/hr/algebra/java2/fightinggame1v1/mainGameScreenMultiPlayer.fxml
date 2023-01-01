@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="1015.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.java2.fightinggame1v1.MainGameScreenMultiPlayer">
+   <children>
+      <TextArea fx:id="chatTextArea" editable="false" layoutX="801.0" layoutY="54.0" prefHeight="397.0" prefWidth="200.0" />
+      <TextField fx:id="chatMessageTextField" layoutX="801.0" layoutY="473.0" onAction="#onEnterSendMessage" onKeyPressed="#onEnterSendMessage" prefHeight="25.0" prefWidth="200.0" />
+      <Button layoutX="801.0" layoutY="522.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="25.0" prefWidth="200.0" text="Send" />
+      <Label layoutX="409.0" layoutY="25.0" text="Battle for Middle-earth">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="imPlayerClassIcon" fitHeight="220.0" fitWidth="220.0" layoutX="24.0" layoutY="98.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="btnPlayerMoveOne" layoutX="24.0" layoutY="423.0" mnemonicParsing="false" onAction="#attackOneButtonPressed" prefHeight="123.0" prefWidth="141.0" style="-fx-background-color: none;" textAlignment="CENTER" wrapText="true" />
+      <Button fx:id="btnPlayerMoveTwo" layoutX="165.0" layoutY="423.0" mnemonicParsing="false" onAction="#attackTwoButtonPressed" prefHeight="123.0" prefWidth="141.0" style="-fx-background-color: none;" textAlignment="CENTER" wrapText="true" />
+      <Button fx:id="btnPlayerMoveThree" layoutX="306.0" layoutY="423.0" mnemonicParsing="false" onAction="#attackThreeButtonPressed" prefHeight="123.0" prefWidth="141.0" style="-fx-background-color: none;" textAlignment="CENTER" wrapText="true" />
+      <Label fx:id="lbPlayerDmgDeal" layoutX="685.0" layoutY="217.0" textFill="RED" />
+      <Label fx:id="lbPlayerInfo" layoutX="24.0" layoutY="66.0" wrapText="true">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

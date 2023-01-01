@@ -6,6 +6,7 @@ import java.util.List;
 
 public class SerializablePlayer implements Serializable {
 
+    private static final long serialVersionUID = 4L;
     private String playerName;
     private Characters characterClass;
     private int healthPoints;
@@ -19,6 +20,12 @@ public class SerializablePlayer implements Serializable {
         this.numberOfWins = numberOfWins;
         this.bestVictoryTime = bestVictoryTime;
         this.movesList = movesList;
+    }
+
+    public SerializablePlayer(String playerName, Characters characterClass, int healthPoints) {
+        this.playerName = playerName;
+        this.characterClass = characterClass;
+        this.healthPoints = healthPoints;
     }
 
     public String getPlayerName() {
@@ -68,4 +75,5 @@ public class SerializablePlayer implements Serializable {
     public void setMovesList(List<List<String>> movesList) {
         this.movesList = movesList;
     }
+
 }

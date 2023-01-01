@@ -19,9 +19,7 @@ public class ReflectionUtils {
 
     private static void appendPackage(Class<?> clazz, StringBuilder classInfo) {
         classInfo
-                .append(clazz.getPackage())
-                .append(System.lineSeparator())
-                .append(System.lineSeparator());
+                .append(clazz.getPackage());
     }
 
     private static void appendModifiers(Class<?> clazz, StringBuilder classInfo) {
@@ -35,7 +33,6 @@ public class ReflectionUtils {
         }
         if (first) {
             classInfo
-                    .append(System.lineSeparator())
                     .append("extends");
         }
         classInfo
@@ -47,7 +44,6 @@ public class ReflectionUtils {
     private static void appendInterfaces(Class<?> clazz, StringBuilder classInfo) {
         if (clazz.getInterfaces().length > 0) {
             classInfo
-                    .append(System.lineSeparator())
                     .append("implements ")
                     .append(
                             Arrays.stream(clazz.getInterfaces())
@@ -67,8 +63,6 @@ public class ReflectionUtils {
     public static void appendFields(Class<?> clazz, StringBuilder classAndMembersInfo) {
         Field[] fields = clazz.getDeclaredFields();
         classAndMembersInfo
-                .append(System.lineSeparator())
-                .append(System.lineSeparator())
                 .append(
                 Arrays.stream(fields)
                         .map(Objects::toString)
@@ -79,9 +73,6 @@ public class ReflectionUtils {
     public static void appendMethods(Class<?> clazz, StringBuilder classAndMembersInfo) {
         Method[] methods = clazz.getDeclaredMethods();
         for (Method method : methods) {
-            classAndMembersInfo
-                    .append(System.lineSeparator())
-                    .append(System.lineSeparator());
             appendAnnotations(method, classAndMembersInfo);
             classAndMembersInfo
                     .append(System.lineSeparator())
@@ -122,9 +113,6 @@ public class ReflectionUtils {
     public static void appendConstructors(Class<?> clazz, StringBuilder classAndMembersInfo) {
         Constructor[] constructors = clazz.getDeclaredConstructors();
         for (Constructor constructor : constructors) {
-            classAndMembersInfo
-                    .append(System.lineSeparator())
-                    .append(System.lineSeparator());
             appendAnnotations(constructor, classAndMembersInfo);
             classAndMembersInfo
                     .append(System.lineSeparator())
