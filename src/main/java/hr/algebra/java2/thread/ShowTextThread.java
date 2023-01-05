@@ -5,7 +5,8 @@ import hr.algebra.java2.fightinggame1v1.MainGameScreen;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ShowTextThreadPlayerOne implements Runnable{
+public class ShowTextThread implements Runnable{
+
     @Override
     public void run() {
         while (true) {
@@ -26,7 +27,7 @@ public class ShowTextThreadPlayerOne implements Runnable{
             System.out.println("Thread is adding a move to a list...");
             wait();
         } catch (InterruptedException ex) {
-            Logger.getLogger(ShowTextThreadPlayerOne.class.getName()).log(
+            Logger.getLogger(MainGameScreen.class.getName()).log(
                     Level.SEVERE, null, ex);
         }
 

@@ -74,7 +74,7 @@ public class CharacterSelectionScreen implements Initializable {
             playerTwoInfo = new PlayerInfo(tfPlayerTwoName.getText(), cbPlayerTwoClass.getValue(), ClassPLayerUtil.selectedHp(cbPlayerTwoClass.getValue()), imPlayerTwoImage.getImage());
 
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(Settings.getFILENAME_MAIN_GAME()));
-            Scene scene = new Scene(fxmlLoader.load(),1244,600);
+            Scene scene = new Scene(fxmlLoader.load(),1000,600);
             HelloApplication.getMainStage().setTitle(Settings.getSTAGE_TITLE());
             HelloApplication.getMainStage().setScene(scene);
             HelloApplication.getMainStage().show();

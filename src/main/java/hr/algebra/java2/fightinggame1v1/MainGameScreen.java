@@ -1,7 +1,7 @@
 package hr.algebra.java2.fightinggame1v1;
 
 import hr.algebra.java2.model.*;
-import hr.algebra.java2.rmi.ChatService;
+import hr.algebra.java2.thread.ShowTextThread;
 import hr.algebra.java2.utils.FileUtils;
 import hr.algebra.java2.utils.Messenger;
 import hr.algebra.java2.utils.Settings;
@@ -11,7 +11,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 
 import java.io.FileInputStream;
@@ -20,15 +19,14 @@ import java.io.ObjectInputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.*;
-
-import static hr.algebra.java2.jndi.ServerConfigurationKey.RMI_SERVER_PORT;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class MainGameScreen implements Initializable {
     @FXML
@@ -39,6 +37,10 @@ public class MainGameScreen implements Initializable {
     private Label lbPlayerOneDmgDeal;
     @FXML
     private Label lbPlayerTwoDmgDeal;
+    @FXML
+    private Label lbPlayerOneAddMoveToList;
+    @FXML
+    private Label lbPlayerTwoAddMoveToList;
     @FXML
     private ImageView imPlayerOneImage;
     @FXML
@@ -84,8 +86,6 @@ public class MainGameScreen implements Initializable {
     public static Wizard wizard = Wizard.getInstance();
     public static HorseMan horseMan = HorseMan.getInstance();
     public static Assassin assassin = Assassin.getInstance();
-    private static Map<Long, PlayerMetaData> playersMetadata = new HashMap<>();
-    private ChatService stub = null;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -94,13 +94,9 @@ public class MainGameScreen implements Initializable {
 
         startTimeCounter = Instant.now();
 
-
         try {
             loadSavedMoves();
-
-            Registry registry = LocateRegistry.getRegistry("localhost", RMI_SERVER_PORT.ordinal());
-            stub = (ChatService) registry.lookup(ChatService.REMOTE_OBJECT_NAME);
-        } catch (IOException | ClassNotFoundException | NotBoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
@@ -159,7 +155,7 @@ public class MainGameScreen implements Initializable {
         if (playerOneTurn) {
             playerOneTurn = false;
             playerTwoTurn = true;
-            movesListPlayerOne.add(btnPlayerOneMoveOne.getText());
+            addingMoveToList(movesListPlayerOne, btnPlayerOneMoveOne);
             playerTwoMovesVisible();
             playerDisableUsedAttackOne(playerOne);
             updatePlayerHp(playerTwo, btnPlayerOneMoveOne);
@@ -168,13 +164,35 @@ public class MainGameScreen implements Initializable {
         } else if (playerTwoTurn) {
             playerOneTurn = true;
             playerTwoTurn = false;
-            movesListPlayerTwo.add(btnPlayerTwoMoveOne.getText());
+            addingMoveToList(movesListPlayerTwo, btnPlayerTwoMoveOne);
             playerOneMovesVisible();
             playerDisableUsedAttackOne(playerTwo);
             updatePlayerHp(playerOne, btnPlayerTwoMoveOne);
             abilityClassCheck(playerTwo.getCharacterClass(), btnPlayerTwoMoveOne, btnPlayerTwoMoveTwo, btnPlayerTwoMoveThree);
             checkWinner(playerOne, playerTwo);
         }
+    }
+
+    private synchronized void addingMoveToList(List<String> movesListPlayer, Button btnPlayer) {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        System.out.println("Thread has started!");
+        executorService.execute(new ShowTextThread());
+
+        movesListPlayer.add(btnPlayer.getText());
+
+        if (movesListPlayer == movesListPlayerOne) {
+            lbPlayerOneAddMoveToList.setText("Player one move " + btnPlayer.getText() + " saved!");
+        } else if (movesListPlayer == movesListPlayerTwo) {
+            lbPlayerTwoAddMoveToList.setText("Player two move " + btnPlayer.getText() + " saved!");
+        }
+
+        try {
+            executorService.awaitTermination(1000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Thread has finished!");
+
     }
 
     private void playerDisableUsedAttackOne(PlayerInfo player) {
@@ -199,7 +217,7 @@ public class MainGameScreen implements Initializable {
         if (playerOneTurn) {
             playerOneTurn = false;
             playerTwoTurn = true;
-            movesListPlayerOne.add(btnPlayerOneMoveTwo.getText());
+            addingMoveToList(movesListPlayerOne, btnPlayerOneMoveTwo);
             playerTwoMovesVisible();
             playerDisableUsedAttackTwo(playerOne);
             updatePlayerHp(playerTwo, btnPlayerOneMoveTwo);
@@ -208,7 +226,7 @@ public class MainGameScreen implements Initializable {
         } else if (playerTwoTurn) {
             playerOneTurn = true;
             playerTwoTurn = false;
-            movesListPlayerTwo.add(btnPlayerTwoMoveTwo.getText());
+            addingMoveToList(movesListPlayerTwo, btnPlayerTwoMoveTwo);
             playerOneMovesVisible();
             playerDisableUsedAttackTwo(playerTwo);
             updatePlayerHp(playerOne, btnPlayerTwoMoveTwo);
@@ -239,7 +257,7 @@ public class MainGameScreen implements Initializable {
         if (playerOneTurn) {
             playerOneTurn = false;
             playerTwoTurn = true;
-            movesListPlayerOne.add(btnPlayerOneMoveThree.getText());
+            addingMoveToList(movesListPlayerOne, btnPlayerOneMoveThree);
             updatePlayerHp(playerTwo, btnPlayerOneMoveThree);
             playerTwoMovesVisible();
             playerDisableUsedAttackThree(playerOne);
@@ -248,7 +266,7 @@ public class MainGameScreen implements Initializable {
         } else if (playerTwoTurn) {
             playerOneTurn = true;
             playerTwoTurn = false;
-            movesListPlayerTwo.add(btnPlayerTwoMoveThree.getText());
+            addingMoveToList(movesListPlayerTwo, btnPlayerTwoMoveThree);
             updatePlayerHp(playerOne, btnPlayerTwoMoveThree);
             playerOneMovesVisible();
             playerDisableUsedAttackThree(playerTwo);
@@ -404,7 +422,7 @@ public class MainGameScreen implements Initializable {
         }
     }
 
-    public void sendMessage() {
+   /* public void sendMessage() {
         messageProvider();
     }
 
@@ -431,5 +449,5 @@ public class MainGameScreen implements Initializable {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 }
