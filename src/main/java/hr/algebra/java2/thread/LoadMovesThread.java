@@ -10,7 +10,7 @@ public class LoadMovesThread implements Runnable{
     public void run() {
         while (true) {
 
-            loadMove();
+            loadMoveText();
 
             try {
                 Thread.sleep(1000);
@@ -21,7 +21,7 @@ public class LoadMovesThread implements Runnable{
         }
     }
 
-    public synchronized void loadMove() {
+    public synchronized void loadMoveText() {
         try {
             System.out.println("Thread is loading new moves...");
             wait();

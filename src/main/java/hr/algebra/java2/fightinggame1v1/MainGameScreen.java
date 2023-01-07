@@ -1,8 +1,8 @@
 package hr.algebra.java2.fightinggame1v1;
 
 import hr.algebra.java2.model.*;
+import hr.algebra.java2.thread.AddMoveThread;
 import hr.algebra.java2.thread.LoadMovesThread;
-import hr.algebra.java2.thread.ShowTextThread;
 import hr.algebra.java2.utils.FileUtils;
 import hr.algebra.java2.utils.Messenger;
 import hr.algebra.java2.utils.Settings;
@@ -156,7 +156,7 @@ public class MainGameScreen implements Initializable {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Thread has finished loading moves!");
+        System.out.println("Thread has finished loading new moves!");
     }
 
     public int getRandomAbility(List<String> abilityList) {
@@ -188,7 +188,7 @@ public class MainGameScreen implements Initializable {
     private synchronized void addingMoveToList(List<String> movesListPlayer, Button btnPlayer) {
         ExecutorService executorService = Executors.newCachedThreadPool();
         System.out.println("Thread has started adding move to a list!");
-        executorService.execute(new ShowTextThread());
+        executorService.execute(new AddMoveThread());
 
         movesListPlayer.add(btnPlayer.getText());
 
