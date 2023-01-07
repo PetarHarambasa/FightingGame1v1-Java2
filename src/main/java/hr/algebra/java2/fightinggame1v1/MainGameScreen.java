@@ -1,6 +1,7 @@
 package hr.algebra.java2.fightinggame1v1;
 
 import hr.algebra.java2.model.*;
+import hr.algebra.java2.thread.LoadMovesThread;
 import hr.algebra.java2.thread.ShowTextThread;
 import hr.algebra.java2.utils.FileUtils;
 import hr.algebra.java2.utils.Messenger;
@@ -123,7 +124,11 @@ public class MainGameScreen implements Initializable {
         }
     }
 
-    private void abilityClassCheck(Characters characterClass, Button btnPlayerMoveOne, Button btnPlayerMoveTwo, Button btnPlayerMoveThree) {
+    private synchronized void abilityClassCheck(Characters characterClass, Button btnPlayerMoveOne, Button btnPlayerMoveTwo, Button btnPlayerMoveThree) {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        System.out.println("Thread has started loading new moves!");
+        executorService.execute(new LoadMovesThread());
+
         if (characterClass == Characters.Archer) {
             btnPlayerMoveOne.setText(archer.getClassMovesOne().get(getRandomAbility(archer.getClassMovesOne())));
             btnPlayerMoveTwo.setText(archer.getClassMovesTwo().get(getRandomAbility(archer.getClassMovesTwo())));
@@ -145,6 +150,13 @@ public class MainGameScreen implements Initializable {
             btnPlayerMoveTwo.setText(assassin.getClassMovesTwo().get(getRandomAbility(assassin.getClassMovesTwo())));
             btnPlayerMoveThree.setText(assassin.getClassMovesThree().get(getRandomAbility(assassin.getClassMovesThree())));
         }
+
+        try {
+            executorService.awaitTermination(1000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Thread has finished loading moves!");
     }
 
     public int getRandomAbility(List<String> abilityList) {
@@ -175,7 +187,7 @@ public class MainGameScreen implements Initializable {
 
     private synchronized void addingMoveToList(List<String> movesListPlayer, Button btnPlayer) {
         ExecutorService executorService = Executors.newCachedThreadPool();
-        System.out.println("Thread has started!");
+        System.out.println("Thread has started adding move to a list!");
         executorService.execute(new ShowTextThread());
 
         movesListPlayer.add(btnPlayer.getText());
@@ -191,7 +203,7 @@ public class MainGameScreen implements Initializable {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Thread has finished!");
+        System.out.println("Thread has finished adding move to a list!");
 
     }
 
