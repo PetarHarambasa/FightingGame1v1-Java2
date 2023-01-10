@@ -4,6 +4,7 @@ module hr.algebra.java2.fightinggame1v1.fightinggame1v1 {
     requires java.naming;
     requires java.rmi;
     requires java.logging;
+    requires java.xml;
 
 
     opens hr.algebra.java2.fightinggame1v1 to javafx.fxml;

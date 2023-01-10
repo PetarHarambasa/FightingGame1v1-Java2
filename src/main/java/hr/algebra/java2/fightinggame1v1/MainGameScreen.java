@@ -13,7 +13,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -27,7 +39,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class MainGameScreen implements Initializable {
     @FXML
@@ -151,11 +162,11 @@ public class MainGameScreen implements Initializable {
             btnPlayerMoveThree.setText(assassin.getClassMovesThree().get(getRandomAbility(assassin.getClassMovesThree())));
         }
 
-        try {
+        /*try {
             executorService.awaitTermination(1000, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        }
+        }*/
         System.out.println("Thread has finished loading new moves!");
     }
 
@@ -198,11 +209,11 @@ public class MainGameScreen implements Initializable {
             lbPlayerTwoAddMoveToList.setText("Player two move " + btnPlayer.getText() + " saved!");
         }
 
-        try {
+        /*try {
             executorService.awaitTermination(1000, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        }
+        }*/
         System.out.println("Thread has finished adding move to a list!");
 
     }
@@ -303,7 +314,77 @@ public class MainGameScreen implements Initializable {
             victoryPlayer = playerWin;
             alert.showAndWait();
             playerWin.setNumberOfWins(playerWin.getNumberOfWins() + 1);
+
+            saveXmlPlayerOne();
+            saveXmlPlayerTwo();
+
             victoryScreen();
+        }
+    }
+
+    private void saveXmlPlayerTwo() {
+        try {
+            DocumentBuilderFactory documentBuilderFactory
+                    = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder
+                    = documentBuilderFactory.newDocumentBuilder();
+            Document xmlDocument = documentBuilder.newDocument();
+
+            Element rootElement = xmlDocument.createElement("Moves");
+            xmlDocument.appendChild(rootElement);
+
+            for (String s : movesListPlayerTwo) {
+
+                Element moveElement = xmlDocument.createElement("Move");
+                Node moveTextNode = xmlDocument.createTextNode(s);
+                moveElement.appendChild(moveTextNode);
+                rootElement.appendChild(moveElement);
+            }
+
+            Transformer transformer
+                    = TransformerFactory.newInstance().newTransformer();
+
+            Source xmlSource = new DOMSource(xmlDocument);
+            Result xmlResult = new StreamResult(new File("playertwo.xml"));
+
+            transformer.transform(xmlSource, xmlResult);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveXmlPlayerOne() throws RuntimeException {
+        try {
+            DocumentBuilderFactory documentBuilderFactory
+                    = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder
+                    = documentBuilderFactory.newDocumentBuilder();
+            Document xmlDocument = documentBuilder.newDocument();
+
+            Element rootElement = xmlDocument.createElement("Moves");
+            xmlDocument.appendChild(rootElement);
+
+            for (String s : movesListPlayerOne) {
+
+                Element moveElement = xmlDocument.createElement("Move");
+                Node moveTextNode = xmlDocument.createTextNode(s);
+                moveElement.appendChild(moveTextNode);
+                rootElement.appendChild(moveElement);
+            }
+
+            Transformer transformer
+                    = TransformerFactory.newInstance().newTransformer();
+
+            Source xmlSource = new DOMSource(xmlDocument);
+            Result xmlResult = new StreamResult(new File("playerone.xml"));
+
+            transformer.transform(xmlSource, xmlResult);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

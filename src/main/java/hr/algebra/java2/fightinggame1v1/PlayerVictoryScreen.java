@@ -1,6 +1,6 @@
 package hr.algebra.java2.fightinggame1v1;
 
-import hr.algebra.java2.model.SerializablePlayer;
+import hr.algebra.java2.model.PlayerInfo;
 import hr.algebra.java2.utils.ClassPLayerUtil;
 import hr.algebra.java2.utils.FileUtils;
 import hr.algebra.java2.utils.Messenger;
@@ -11,9 +11,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import hr.algebra.java2.model.PlayerInfo;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
-import java.io.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -80,8 +87,45 @@ public class PlayerVictoryScreen implements Initializable {
         HelloApplication.getMainStage().setScene(scene);
         HelloApplication.getMainStage().show();
     }
+
     public void saveGame() throws IOException {
         FileUtils.saveCurrentGame(playerOne, playerTwo);
         Messenger.showSavedGameMessage();
+    }
+
+    public void replay() {
+        try {
+            InputStream playerOneMovesFile = new FileInputStream("playerone.xml");
+            InputStream playerTwoMovesFile = new FileInputStream("playertwo.xml");
+
+            DocumentBuilder parserPlayerOne =
+                    DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilder parserPlayerTwo =
+                    DocumentBuilderFactory.newInstance().newDocumentBuilder();
+
+            Document xmlPlayerOneDocument = parserPlayerOne.parse(playerOneMovesFile);
+            Document xmlPlayerTwoDocument = parserPlayerTwo.parse(playerTwoMovesFile);
+
+            NodeList nodeListPlayerOne = xmlPlayerOneDocument.getElementsByTagName("Move");
+            NodeList nodeListPlayerTwo = xmlPlayerTwoDocument.getElementsByTagName("Move");
+
+            for (int i = 0; i < nodeListPlayerOne.getLength(); i++) {
+                if (i <= nodeListPlayerOne.getLength()) {
+                    String playerOneMoveString = nodeListPlayerOne.item(i).getTextContent();
+                    System.out.println("Player one move: " + playerOneMoveString);
+                    Thread.sleep(1000);
+                }
+
+                if (i < nodeListPlayerTwo.getLength()) {
+                    String playerTwoMoveString = nodeListPlayerTwo.item(i).getTextContent();
+                    System.out.println("Player two move: " + playerTwoMoveString);
+                    Thread.sleep(1000);
+                }
+            }
+
+            System.out.println("Replay finished!");
+        } catch (IOException | ParserConfigurationException | SAXException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
