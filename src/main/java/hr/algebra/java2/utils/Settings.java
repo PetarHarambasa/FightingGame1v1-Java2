@@ -7,6 +7,7 @@ public class Settings {
     private static final String FILENAME_MOVES_HISTORY = "usedMovesScreen.fxml";
     private static final String FILENAME_PLAYER_VICTORY = "playerVictoryScreen.fxml";
     private static final String FILENAME_MULTIPLAYER_CHAR_SELECTION = "multiplayerCharacterSelectionScreen.fxml";
+    private static final String FILENAME_REPLAY_SCREEN = "replayScreen.fxml";
     private final static String STAGE_TITLE = "Fighting Game 1v1";
     private final static String ERROR_MESSAGE_CHAR_NOT_VALID = "Please insert names and select classes!";
 
@@ -32,6 +33,9 @@ public class Settings {
 
     public static String getFILENAME_MOVES_HISTORY() {
         return FILENAME_MOVES_HISTORY;
+    }
+    public static String getFILENAME_REPLAY_SCREEN() {
+        return FILENAME_REPLAY_SCREEN;
     }
 
     public static String getFILENAME_PLAYER_VICTORY() {

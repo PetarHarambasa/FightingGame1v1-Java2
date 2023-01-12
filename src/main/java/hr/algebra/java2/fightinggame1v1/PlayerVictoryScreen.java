@@ -11,16 +11,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import javafx.stage.Stage;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -93,39 +86,12 @@ public class PlayerVictoryScreen implements Initializable {
         Messenger.showSavedGameMessage();
     }
 
-    public void replay() {
-        try {
-            InputStream playerOneMovesFile = new FileInputStream("playerone.xml");
-            InputStream playerTwoMovesFile = new FileInputStream("playertwo.xml");
-
-            DocumentBuilder parserPlayerOne =
-                    DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            DocumentBuilder parserPlayerTwo =
-                    DocumentBuilderFactory.newInstance().newDocumentBuilder();
-
-            Document xmlPlayerOneDocument = parserPlayerOne.parse(playerOneMovesFile);
-            Document xmlPlayerTwoDocument = parserPlayerTwo.parse(playerTwoMovesFile);
-
-            NodeList nodeListPlayerOne = xmlPlayerOneDocument.getElementsByTagName("Move");
-            NodeList nodeListPlayerTwo = xmlPlayerTwoDocument.getElementsByTagName("Move");
-
-            for (int i = 0; i < nodeListPlayerOne.getLength(); i++) {
-                if (i <= nodeListPlayerOne.getLength()) {
-                    String playerOneMoveString = nodeListPlayerOne.item(i).getTextContent();
-                    System.out.println("Player one move: " + playerOneMoveString);
-                    Thread.sleep(1000);
-                }
-
-                if (i < nodeListPlayerTwo.getLength()) {
-                    String playerTwoMoveString = nodeListPlayerTwo.item(i).getTextContent();
-                    System.out.println("Player two move: " + playerTwoMoveString);
-                    Thread.sleep(1000);
-                }
-            }
-
-            System.out.println("Replay finished!");
-        } catch (IOException | ParserConfigurationException | SAXException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    public void replay() throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(ReplayScreen.class.getResource(Settings.getFILENAME_REPLAY_SCREEN()));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        stage.setTitle(Settings.getSTAGE_TITLE());
+        stage.setScene(scene);
+        stage.show();
     }
 }

@@ -71,10 +71,6 @@ public class MainGameScreen implements Initializable {
     private Button btnPlayerTwoMoveTwo;
     @FXML
     private Button btnPlayerTwoMoveThree;
-    @FXML
-    private TextArea chatTextArea;
-    @FXML
-    private TextField chatMessageTextField;
     private Boolean playerOneTurn;
     private Boolean playerTwoTurn;
     public Instant startTimeCounter;
